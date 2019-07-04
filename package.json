@@ -1,0 +1,62 @@
+{
+  "name": "@bindings/helpers",
+  "version": "1.0.0",
+  "description": "Helper functions taken from a few places. Is it a small, not sure where to put. Put it up here!",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/renoirb/experiments-201907-bili-babel-preset-env-multiple-target-builds.git"
+  },
+  "license": "UNLICENSED",
+  "files": [
+    "dist/"
+  ],
+  "main": "dist",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "build": "yarn run build:js && yarn run build:browser",
+    "build:browser": "yarn run build:browser:cjs && yarn run build:browser:system",
+    "build:browser:cjs": "bili --file-name index.browser.cjs.js --format cjs --target browser",
+    "build:browser:system": "bili --file-name index.browser.system.js --format system --target browser",
+    "build:js": "bili --target node",
+    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('frontend must be installed with Yarn: https://yarnpkg.com/')\"",
+    "pack": "yarn pack -f ../../pack/helpers.tgz",
+    "prepublishOnly": "yarn run build",
+    "test": "jest --maxWorkers=3 --detectOpenHandles",
+    "test:watch": "jest --watch --maxWorkers=3"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.3.0",
+    "@babel/core": "^7.3.0",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-async-generator-functions": "^7.1.1",
+    "@babel/plugin-proposal-export-default-from": "^7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "@babel/plugin-syntax-dynamic-import": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.3.0",
+    "@babel/preset-env": "^7.3.0",
+    "@babel/runtime": "^7.3.0",
+    "@types/core-js": "^2.5.0",
+    "@types/jest": "^24.0.15",
+    "@types/lodash-es": "^4.17.1",
+    "@types/node": "^12.0.0",
+    "babel-jest": "^24.0.0",
+    "babel-plugin-lodash": "^3.3.4",
+    "babel-plugin-module-resolver": "^3.1.3",
+    "bili": "^4.8.0",
+    "core-js": "^3.1.4",
+    "jest": "~24.0.0",
+    "lodash-es": "^4.17.10",
+    "prettier": "^1.16.0",
+    "rollup": "^1.10.1 ",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "9.3.4",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "4.2.3",
+    "rollup-plugin-terser": "^5.1.0"
+  },
+  "engines": {
+    "node": ">=10",
+    "yarn": ">=1.5.0"
+  },
+  "copyright.owner": "ACME Corporation"
+}
