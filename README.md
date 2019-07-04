@@ -23,9 +23,21 @@ For example, we could import this into modules destined to run in MongoDB filter
 ## Usage
 
 If you don't have GNU Make available, try running the commands listed in [Makefile](./Makefile)
+Notice this example relies on an UNIX(ish) filesystem with symbolic links, sorry.
+
+### Dependencies
 
 ```terminal
+# Notice the ln commands for symbolic links
 make deps
-make test
+```
+
+### Building and testing
+
+```terminal
+# Build with debug
 make build
+
+# Cleanup, for rinse-repeat.
+make clean
 ```
