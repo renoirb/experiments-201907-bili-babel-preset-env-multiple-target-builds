@@ -1,7 +1,7 @@
 const {
-  version = 'development',
-  name = 'Untitled 1',
   author = 'Renoir Boulanger <contribs@renoirboulanger.com>',
+  name = 'Untitled 1',
+  version = 'development',
 } = require('./package.json')
 
 const banner = {
@@ -12,9 +12,9 @@ const banner = {
 
 /** @type {import('bili').ConfigOutput} */
 const output = {
-  format: ['cjs', 'esm'],
   name,
   extractCSS: false,
+  format: ['cjs', 'es'],
 }
 
 // https://github.com/egoist/bili/blob/master/src/index.ts#L158
@@ -24,8 +24,14 @@ const plugins = {
   babel: {
     // https://github.com/rollup/rollup-plugin-babel
     // https://github.com/trainorpj/rollup-babel-jest-setup/blob/master/rollup.config.js
-    plugins: ['module:@babel/plugin-external-helpers'],
-    externalHelpers: true,
+    externalHelpers: true, // Works uncommented
+    runtimeHelpers: true, // ^
+    plugins: [
+      // rel=#ShouldWePutThis
+      // Should we copy-pasta this? Is this additive.
+      'module:@babel/plugin-external-helpers', // Works uncommented
+      'module:@babel/plugin-transform-runtime', // ^
+    ],
   },
   terser: {
     // rollup-plugin-terser
@@ -41,6 +47,7 @@ const plugins = {
 
 /** @type {import('bili').Config} */
 module.exports = {
+  name: 'helpers',
   input: 'src/index.js',
   plugins,
   name: 'index',

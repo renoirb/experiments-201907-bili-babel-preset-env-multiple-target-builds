@@ -1,0 +1,38 @@
+{
+  "name": "@bindings/packaging-and-testing",
+  "version": "1.1.1",
+  "license": "UNLICENSED",
+  "files": [
+    "lib/"
+  ],
+  "main": "lib",
+  "dependencies": {
+    "@babel/cli": "^7.3.0",
+    "@babel/core": "^7.3.0",
+    "@babel/plugin-external-helpers": "^7.2.0",
+    "@babel/plugin-proposal-async-generator-functions": "^7.1.1",
+    "@babel/plugin-proposal-export-default-from": "^7.1.0",
+    "@babel/plugin-proposal-object-rest-spread": "^7.3.1",
+    "@babel/plugin-syntax-dynamic-import": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.3.0",
+    "@babel/preset-env": "^7.3.0",
+    "@babel/runtime": "^7.3.0",
+    "@bindings/linting": "file:../linting",
+    "@types/core-js": "^2.5.0",
+    "@types/jest": "^24.0.15",
+    "@types/lodash-es": "^4.17.1",
+    "@types/node": "^12.0.0",
+    "babel-jest": "^24.0.0",
+    "babel-plugin-lodash": "^3.3.4",
+    "babel-plugin-module-resolver": "^3.1.3",
+    "bili": "^4.8.0",
+    "core-js": "^3.1.4",
+    "jest": "~24.0.0",
+    "rollup": "^1.10.1 ",
+    "rollup-plugin-babel": "^4.3.2",
+    "rollup-plugin-commonjs": "9.3.4",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "4.2.3",
+    "rollup-plugin-terser": "^4.0.4"
+  }
+}

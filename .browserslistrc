@@ -1,0 +1,7 @@
+# Browser and JavaScript runtimes we support
+# https://github.com/browserslist/browserslist
+# see https://github.com/browserslist/browserslist#configuring-for-different-environments later #TODO
+
+last 2 versions
+ie >= 10
+node 10

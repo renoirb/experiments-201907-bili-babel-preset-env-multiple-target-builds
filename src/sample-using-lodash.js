@@ -1,3 +1,3 @@
 import { camelCase, isEqual, debounce } from 'lodash'
 
-export { camelCase, isEqual, debounce }
+export { isEqual, debounce, camelCase }

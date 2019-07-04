@@ -1,13 +1,52 @@
 // THIS IS NORMALLY IMPORTED FROM ANOTHER MODULE
 
-// https://babeljs.io/docs/en/config-files#config-function-api
-module.exports = (
-  /** @type {import('@types/babel__core').ConfigAPI} */ api
+// .browserslistrc??
+const browsersList = Object.freeze([`last 2 versions`, 'ie >= 10'])
+
+// #WIP
+const createTargets = (
+  environment = 'development',
+  nodeVersion = 10,
+  browsers,
+  npm_lifecycle_event = 'dusting'
 ) => {
+  const isBrowserBuildUgglyHack = /^build:browser:/.test(npm_lifecycle_event)
+  const isTest = /^test$/i.test(environment)
+
+  // https://new.babeljs.io/docs/en/next/babel-preset-env.html#targets
+  let targets = {
+    node: Number(nodeVersion),
+    browsers: [...browsers],
+  }
+
+  if (!isBrowserBuildUgglyHack || isTest) {
+    delete targets.browsers
+  }
+  // ===== /CREATE MULTIPLE TARGET BUILD ======
+
+  return targets
+}
+
+// https://babeljs.io/docs/en/config-files#config-function-api
+module.exports = function babelConfig(
+  /** @type {import('@types/babel__core').ConfigAPI} */ api
+) {
+  /**
+   * ლ(ಠ益ಠ)ლ
+   *
+   * Y U NO(t) work!
+   *
+   * This'll work, some day.
+   */
   api.cache(false)
   api.assertVersion('^7.2')
 
+  // Normally make this dynamic #WIP
   const {
+    PROJECT_ENV_NODE_VERSION = 10,
+    NODE_ENV = 'tropical',
+    DEBUG = '', // e.g. '*,-babel'
+
     /**
      * **** Trigger warning: This might be a bit too hacky! (it was worse a few hours ago) ****
      *
@@ -29,65 +68,87 @@ module.exports = (
      */
     npm_lifecycle_event = 'build:js',
   } = process.env
-  const isBrowserBuildUgglyHack = /^build:browser:/.test(npm_lifecycle_event)
 
-  // https://new.babeljs.io/docs/en/next/babel-preset-env.html#targets
-  const targets = {}
-  if (isBrowserBuildUgglyHack) {
-    // https://github.com/browserslist/browserslist
-    targets.browsers = [`last 2 versions`, 'ie >= 10']
-  } else {
-    targets.node = 10
-  }
-  // ===== /CREATE MULTIPLE TARGET BUILD ======
+  const nodeEnv = NODE_ENV // api.env() // <<-- └(՞▃՞ └)
 
-  const envName = api.envName
-
-  console.log(
-    `\n${npm_lifecycle_event}`,
-    { envName, targets: { ...targets } },
-    `\n`
+  // #WIP
+  const targets = createTargets(
+    nodeEnv,
+    PROJECT_ENV_NODE_VERSION,
+    browsersList,
+    npm_lifecycle_event
   )
+
+  if (String(DEBUG).length > 0) {
+    console.log('babel.config', {
+      targets: JSON.parse(JSON.stringify(targets)),
+      npm_lifecycle_event,
+      nodeEnv,
+    })
+    // console.log('process.env', process.env)
+  }
 
   // At https://github.com/egoist/bili/blob/master/src/index.ts#L158
   // If we put a log, we can see the target value.
   // console.log('bili createRollupConfig config.output.target', config.output.target)
+
+  /** @type {import('@types/babel__core').TransformOptions} */
+  const babelPresetEnv = {
+    // https://new.babeljs.io/docs/en/next/babel-preset-env.html
+    targets,
+    debug: true,
+    // BEGIN rel=#ShouldWePutThis
+    loose: true,
+    corejs: '3.1.4', // match with root's core-js package version!
+    modules: 'auto',
+    shippedProposals: true,
+    useBuiltIns: 'usage',
+    // END rel=#ShouldWePutThis
+  }
 
   const presets = [
     [
       // https://new.babeljs.io/docs/en/next/babel-preset-env.html
       // https://babeljs.io/docs/en/babel-preset-env
       '@babel/preset-env',
-      {
-        useBuiltIns: 'usage',
-        corejs: '3.1.4', // match with root's core-js package version!
-        shippedProposals: true,
-        debug: true,
-        targets,
-        modules: false,
-      },
+      babelPresetEnv,
     ],
   ]
 
+  // Is this overwriting, or additive?
   const plugins = [
-    '@babel/plugin-proposal-export-default-from',
-    '@babel/plugin-external-helpers',
+    '@babel/plugin-transform-runtime',
+    // BEGIN rel=#ShouldWePutThis
+    // '@babel/plugin-external-helpers',
+    // '@babel/plugin-transform-async-to-generator',
+    // '@babel/plugin-transform-regenerator',
+    // '@babel/plugin-transform-arrow-functions',
+    // '@babel/plugin-proposal-export-default-from',
+    // '@babel/plugin-proposal-async-generator-functions',
+    // END rel=#ShouldWePutThis
     // https://github.com/lodash/babel-plugin-lodash
     'babel-plugin-lodash',
   ]
 
   /** @type {import('@types/babel__core').TransformOptions} */
   return {
-    exclude: 'node_modules/**' /* only transpile our source code */,
+    // exclude: 'node_modules/**' /* only transpile our source code */,
+    // ------ THIS IS WHERE IT IS GETTING FUNKY ------
     presets,
     plugins,
     env: {
       test: {
-        presets: [['@babel/preset-env', { modules: 'cjs' }]],
+        presets: [
+          // 'babel-preset-jest', // rel=#ShouldWePutThis
+          ['@babel/preset-env', { ...babelPresetEnv, modules: 'cjs' }],
+        ],
       },
       build: {
-        presets: [['@babel/preset-env', { modules: false }]],
+        presets: [
+          ['@babel/preset-env', { ...babelPresetEnv, modules: 'auto' }],
+        ],
       },
     },
+    // ------ /THIS IS WHERE IT IS GETTING FUNKY ------
   }
 }
