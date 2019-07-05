@@ -1,5 +1,5 @@
 BUILD_DIR = $(shell pwd)
-DEBUG = *,-babel,-babel:config:loading:files
+DEBUG = "*,-babel,-babel:config:loading:files"
 
 node_modules:
 	yarn --prefer-offline --cache-folder .yarn.cache/
@@ -36,11 +36,13 @@ lint: deps
 
 .PHONY: test
 test: deps
-	yarn test
+	export DEBUG=$(DEBUG) && \
+		yarn test
 
 .PHONY: dist
 dist: deps
-	yarn build
+	export DEBUG=$(DEBUG) && \
+		yarn build
 
 .PHONY: build
 build: dist

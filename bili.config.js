@@ -21,6 +21,7 @@ const output = {
 
 /** https://bili.egoist.sh/#/plugins  */
 const plugins = {
+  /* ------ WIP ------
   babel: {
     // https://github.com/rollup/rollup-plugin-babel
     // https://github.com/trainorpj/rollup-babel-jest-setup/blob/master/rollup.config.js
@@ -33,6 +34,7 @@ const plugins = {
       'module:@babel/plugin-transform-runtime', // ^
     ],
   },
+  // ------ /WIP ------ */
   terser: {
     // rollup-plugin-terser
     output: { comments: /^!/ }, // Was working before?

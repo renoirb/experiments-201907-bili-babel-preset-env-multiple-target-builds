@@ -1,51 +1,14 @@
 // THIS IS NORMALLY IMPORTED FROM ANOTHER MODULE
 
-// .browserslistrc??
-const browsersList = Object.freeze([`last 2 versions`, 'ie >= 10'])
-
-// #WIP
+/**
+ * Generate "targets" based on process.env NodeJS.ProcessEnv
+ * @type {*}
+ */
 const createTargets = (
-  environment = 'development',
-  nodeVersion = 10,
-  browsers,
-  npm_lifecycle_event = 'dusting'
+  /** @type {import('@types/node').ProcessEnv} */ processEnvArg
 ) => {
-  const isBrowserBuildUgglyHack = /^build:browser:/.test(npm_lifecycle_event)
-  const isTest = /^test$/i.test(environment)
-
-  // https://new.babeljs.io/docs/en/next/babel-preset-env.html#targets
-  let targets = {
-    node: Number(nodeVersion),
-    browsers: [...browsers],
-  }
-
-  if (!isBrowserBuildUgglyHack || isTest) {
-    delete targets.browsers
-  }
-  // ===== /CREATE MULTIPLE TARGET BUILD ======
-
-  return targets
-}
-
-// https://babeljs.io/docs/en/config-files#config-function-api
-module.exports = function babelConfig(
-  /** @type {import('@types/babel__core').ConfigAPI} */ api
-) {
-  /**
-   * ლ(ಠ益ಠ)ლ
-   *
-   * Y U NO(t) work!
-   *
-   * This'll work, some day.
-   */
-  api.cache(false)
-  api.assertVersion('^7.2')
-
-  // Normally make this dynamic #WIP
   const {
-    PROJECT_ENV_NODE_VERSION = 10,
-    NODE_ENV = 'tropical',
-    DEBUG = '', // e.g. '*,-babel'
+    NODE_ENV = 'development',
 
     /**
      * **** Trigger warning: This might be a bit too hacky! (it was worse a few hours ago) ****
@@ -67,35 +30,45 @@ module.exports = function babelConfig(
      * See https://github.com/egoist/bili/issues/219
      */
     npm_lifecycle_event = 'build:js',
-  } = process.env
+  } = processEnvArg
 
-  const nodeEnv = NODE_ENV // api.env() // <<-- └(՞▃՞ └)
+  let node = 10
 
-  // #WIP
-  const targets = createTargets(
-    nodeEnv,
-    PROJECT_ENV_NODE_VERSION,
-    browsersList,
-    npm_lifecycle_event
-  )
+  // .browserslistrc? How is it loaded?
+  const browsers = [`last 2 versions`, 'ie >= 10']
 
-  if (String(DEBUG).length > 0) {
-    console.log('babel.config', {
-      targets: JSON.parse(JSON.stringify(targets)),
-      npm_lifecycle_event,
-      nodeEnv,
-    })
-    // console.log('process.env', process.env)
+  const isBrowserBuildUgglyHack = /^build:browser:/.test(npm_lifecycle_event)
+  const isTest = /^test$/i.test(NODE_ENV)
+
+  // https://new.babeljs.io/docs/en/next/babel-preset-env.html#targets
+  let targets = {
+    node,
+    browsers,
   }
 
-  // At https://github.com/egoist/bili/blob/master/src/index.ts#L158
-  // If we put a log, we can see the target value.
-  // console.log('bili createRollupConfig config.output.target', config.output.target)
+  if (!isBrowserBuildUgglyHack || isTest) {
+    delete targets.browsers
+  }
+  // ===== /CREATE MULTIPLE TARGET BUILD ======
 
+  return targets
+}
+
+/**
+ * Generate a Babel TransformOptions configuration object.
+ *
+ * See also:
+ * - https://new.babeljs.io/docs/en/next/babel-preset-env.html
+ * - https://babeljs.io/docs/en/babel-preset-env
+ * - https://github.com/rollup/rollup-plugin-babel
+ * - https://github.com/trainorpj/rollup-babel-jest-setup/blob/master/rollup.config.js
+ *
+ * @return {import('@types/babel__core').TransformOptions}
+ */
+const createTransformOptions = (hopefullyValidTargetArg = undefined) => {
   /** @type {import('@types/babel__core').TransformOptions} */
-  const babelPresetEnv = {
+  let freshTransformOptions = {
     // https://new.babeljs.io/docs/en/next/babel-preset-env.html
-    targets,
     debug: true,
     // BEGIN rel=#ShouldWePutThis
     loose: true,
@@ -106,49 +79,92 @@ module.exports = function babelConfig(
     // END rel=#ShouldWePutThis
   }
 
-  const presets = [
-    [
-      // https://new.babeljs.io/docs/en/next/babel-preset-env.html
-      // https://babeljs.io/docs/en/babel-preset-env
-      '@babel/preset-env',
-      babelPresetEnv,
-    ],
-  ]
+  if (hopefullyValidTargetArg) {
+    try {
+      const targets = JSON.parse(JSON.stringify(hopefullyValidTargetArg))
+      freshTransformOptions.targets = targets
+    } catch (e) {
+      // Fail silently
+    }
+  }
 
-  // Is this overwriting, or additive?
-  const plugins = [
-    '@babel/plugin-transform-runtime',
-    // BEGIN rel=#ShouldWePutThis
-    // '@babel/plugin-external-helpers',
-    // '@babel/plugin-transform-async-to-generator',
-    // '@babel/plugin-transform-regenerator',
-    // '@babel/plugin-transform-arrow-functions',
-    // '@babel/plugin-proposal-export-default-from',
-    // '@babel/plugin-proposal-async-generator-functions',
-    // END rel=#ShouldWePutThis
-    // https://github.com/lodash/babel-plugin-lodash
-    'babel-plugin-lodash',
-  ]
+  return freshTransformOptions
+}
+
+// https://babeljs.io/docs/en/config-files#config-function-api
+module.exports = function babelConfig(
+  /** @type {import('@types/babel__core').ConfigAPI} */ api
+) {
+  api.cache(false)
+  api.assertVersion('^7.2')
+
+  /**
+   * #HowCanWeUseBabelConfigAPI
+   * Figure how to properly use this babelConfig closure. #TODO
+   * What else can we do with "api"?
+   * How can we use api.env()?
+   */
+
+  const {
+    DEBUG = '', // e.g. '*,-babel'
+    NODE_ENV = 'development',
+    npm_lifecycle_event = 'build:js',
+  } = process.env
+  const targets = createTargets(process.env)
+
+  let plugins = []
+
+  // https://bili.egoist.sh/#/recipes/javascript#babel
+  let presets = []
+
+  if (String(DEBUG).length > 0) {
+    console.log('babel.config', {
+      targets: JSON.parse(JSON.stringify(targets)),
+      NODE_ENV,
+      DEBUG,
+      npm_lifecycle_event,
+    })
+  }
+
+  // At https://github.com/egoist/bili/blob/master/src/index.ts#L158
+  // If we put a log, we can see the target value.
+  // console.log('bili createRollupConfig config.output.target', config.output.target)
+
+  /**
+   * #ShouldWePutThis
+   * What should we put, how "zero config" is it, or rather how
+   * far does the "install bili" and start work goes.
+   * ... without adding other configs?
+   */
+
+  presets.push(['@babel/preset-env', createTransformOptions(targets)])
+
+  presets.push(['bili/babel'])
+
+  // https://github.com/lodash/babel-plugin-lodash
+  plugins.push('babel-plugin-lodash')
+
+  // Is this overwriting, or additive? rel=#ShouldWePutThis
+  // plugins.push('@babel/plugin-external-helpers')  // rel=#ShouldWePutThis
+  // plugins.push('@babel/plugin-transform-runtime') // ^
 
   /** @type {import('@types/babel__core').TransformOptions} */
-  return {
-    // exclude: 'node_modules/**' /* only transpile our source code */,
-    // ------ THIS IS WHERE IT IS GETTING FUNKY ------
+  const babelTransformOptions = {
+    exclude: 'node_modules/**',
     presets,
     plugins,
     env: {
       test: {
         presets: [
-          // 'babel-preset-jest', // rel=#ShouldWePutThis
-          ['@babel/preset-env', { ...babelPresetEnv, modules: 'cjs' }],
-        ],
-      },
-      build: {
-        presets: [
-          ['@babel/preset-env', { ...babelPresetEnv, modules: 'auto' }],
+          [
+            '@babel/preset-env',
+            { ...createTransformOptions(targets), modules: 'cjs' },
+          ],
+          // ['babel-preset-jest'], // rel=#ShouldWePutThis
         ],
       },
     },
-    // ------ /THIS IS WHERE IT IS GETTING FUNKY ------
   }
+
+  return babelTransformOptions
 }

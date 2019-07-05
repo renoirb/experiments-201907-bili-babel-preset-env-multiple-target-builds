@@ -19,7 +19,7 @@
     "build:browser:system": "bili --file-name index.browser.system.js --format system --target browser",
     "build:js": "bili --target node",
     "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('frontend must be installed with Yarn: https://yarnpkg.com/')\"",
-    "lint": "prettier '**/*.{js,md}' --write",
+    "lint": "prettier '**/*.{js,md}' --ignore-path .gitignore --write",
     "prepublishOnly": "yarn run build",
     "test": "jest --maxWorkers=3 --detectOpenHandles",
     "test:watch": "jest --watch --maxWorkers=3"
