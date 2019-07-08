@@ -1,0 +1,47 @@
+{
+  "name": "frontend-bindings",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Assemblage of JavaScript/TypeScript code we can make reference from other projects. All packages compiles down to ECMAScript 2015.",
+  "homepage": "https://cgiraptor.atlassian.net/wiki/spaces/UN/pages/612204555",
+  "bugs": {
+    "url": "https://git.unify360.cgi.com:50043/unify360/frontend-bindings/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://git.unify360.cgi.com:50043/unify360/frontend-bindings.git"
+  },
+  "license": "LicenseRef-LICENSE",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "prebootstrap": "yarn",
+    "bootstrap": "lerna bootstrap",
+    "build": "lerna run build",
+    "dist": "lerna run pack",
+    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('frontend must be installed with Yarn: https://yarnpkg.com/')\"",
+    "lerna": "lerna",
+    "outdated": "yarn outdated --depth 0 && lerna exec --no-bail \"yarn outdated --depth 0\"",
+    "test": "lerna run test"
+  },
+  "devDependencies": {
+    "@frontend-bindings/bundling-config": "file:packages/bundling-config",
+    "@frontend-bindings/bundling-config-typescript": "file:packages/bundling-config-typescript",
+    "@frontend-bindings/eslint-config-base": "file:packages/eslint-config-base",
+    "@types/koa": "^2.0.48",
+    "lerna": "^3.15.0",
+    "lodash-es": "^4.17.10"
+  },
+  "engines": {
+    "node": ">=10",
+    "yarn": ">=1.5.0"
+  },
+  "authors": [
+    {
+      "email": "renoir.boulanger@cgi.com",
+      "name": "Renoir Boulanger"
+    }
+  ],
+  "copyright.owner": "CGI Inc."
+}

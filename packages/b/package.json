@@ -1,0 +1,33 @@
+{
+  "name": "@frontend-bindings/b",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://git.unify360.cgi.com:50043/unify360/frontend-bindings.git"
+  },
+  "license": "UNLICENSED",
+  "files": [
+    "dist"
+  ],
+  "main": "dist",
+  "module": "dist/index.esm.js",
+  "scripts": {
+    "build": "yarn run build:node",
+    "build:node": "bili --verbose --stack-trace --target node",
+    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('frontend must be installed with Yarn: https://yarnpkg.com/')\"",
+    "lint": "prettier '**/*.{js,md}' --ignore-path .gitignore --write",
+    "prepublishOnly": "yarn run build",
+    "test": "jest --verbose --maxWorkers=3 --detectOpenHandles",
+    "test:watch": "jest --verbose --watch --maxWorkers=3 --detectOpenHandles"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.2.0"
+  },
+  "devDependencies": {
+    "lodash-es": "^4.17.10"
+  },
+  "publishConfig": {
+    "registry": "https://nexus.unify360.cgi.com:50043/repository/npm-hosted/"
+  },
+  "copyright.owner": "CGI Inc."
+}

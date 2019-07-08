@@ -1,0 +1,45 @@
+{
+  "name": "@frontend-bindings/eslint-config-base",
+  "version": "1.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://git.unify360.cgi.com:50043/unify360/frontend-bindings.git"
+  },
+  "license": "LicenseRef-LICENSE",
+  "files": [
+    "index.js",
+    "eslint.config.js",
+    "prettier.config.js",
+    "vue.js",
+    "jest.js",
+    "Makefile*"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "pack": "yarn pack -f ../../pack/eslint-config-base.tgz",
+    "prettier-check": "eslint --print-config . | eslint-config-prettier-check"
+  },
+  "dependencies": {
+    "@vue/eslint-config-prettier": "^4.0",
+    "babel-eslint": "^10.0.1",
+    "eslint": "^5.13.0",
+    "eslint-config-prettier": "^4.0.0",
+    "eslint-friendly-formatter": "^4.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.2.2",
+    "eslint-plugin-lodash-fp": "^2.2.0-a1",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-prettier": "^3.0.1",
+    "eslint-plugin-promise": "^4.0",
+    "eslint-plugin-standard": "^4.0",
+    "eslint-plugin-vue": "^5.1.0",
+    "prettier": "^1.18.0",
+    "prettier-eslint": "^8.8.2",
+    "prettier-eslint-cli": "^4.7.1"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://nexus.unify360.cgi.com:50043/repository/npm-hosted/"
+  },
+  "copyright.owner": "CGI Inc."
+}

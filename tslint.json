@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json.schemastore.org/tslint",
+  "extends": [
+    "tslint:latest",
+    "tslint-config-prettier",
+    "tslint-plugin-prettier",
+    "tslint-immutable"
+  ],
+  // See https://palantir.github.io/tslint/rules/
+  "rules": {
+    "prettier": true,
+    "max-classes-per-file": [false, 10, "exclude-class-expressions"],
+    // These rules find errors related to TypeScript features.
+    "adjacent-overload-signatures": true,
+    "prefer-for-of": true,
+    "unified-signatures": true,
+    "no-any": true,
+    "interface-name": [true, "never-prefix"],
+    // TODO: allow devDependencies only in **/*.spec.ts files:
+    // waiting on https://github.com/palantir/tslint/pull/3708
+    "no-implicit-dependencies": [true, "dev"],
+    // These rules catch common errors in JS programming or otherwise
+    // confusing constructs that are prone to producing bugs.
+    "label-position": true,
+    "no-arg": true,
+    "no-construct": true,
+    "no-duplicate-variable": true,
+    "no-invalid-this": true,
+    "no-misused-new": true,
+    "no-shadowed-variable": true,
+    "no-string-throw": true,
+    "no-unused-expression": true,
+    "triple-equals": [true, "allow-null-check", "allow-undefined-check"],
+    /* tslint-immutable rules */
+    // Recommended built-in rules
+    "no-var-keyword": true,
+    "no-parameter-reassignment": true,
+    "typedef": [true, "call-signature"],
+    "await-promise": [true, "PromiseLike", "RequestPromise"],
+    "no-floating-promises": [true, "PromiseLike", "RequestPromise"],
+    "no-void-expression": [true, "ignore-arrow-function-shorthand"]
+  }
+}

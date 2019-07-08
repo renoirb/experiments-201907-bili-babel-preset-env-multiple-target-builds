@@ -1,0 +1,28 @@
+{
+  "$schema": "http://json.schemastore.org/tsconfig",
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    // Things recommended by Dr. Axel Rauschmayer
+    // see http://2ality.com/2018/04/type-notation-typescript.html
+    "alwaysStrict": true /* Use JavaScript’s strict mode whenever possible. */,
+    "strictFunctionTypes": true /* stronger checks for function types. */,
+    "strictPropertyInitialization": true /* If a property can’t have the value undefined, then it must be initialized in the constructor. */,
+    // ^ Things recommended by Dr. Axel Rauschmayer
+    "downlevelIteration": true,
+    "strict": true /* Enable all strict type-checking options. */,
+    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
+    "allowSyntheticDefaultImports": true,
+    /* Additional Checks */
+    "noUnusedLocals": true /* Report errors on unused locals. */,
+    "noUnusedParameters": true /* Report errors on unused parameters. */,
+    "noImplicitReturns": true /* Report error when not all code paths in function return a value. */,
+    "noFallthroughCasesInSwitch": true /* Report errors for fallthrough cases in switch statement. */,
+    /* Debugging Options */
+    "traceResolution": false /* Report module resolution log messages. */,
+    "listEmittedFiles": false /* Print names of generated files part of the compilation. */,
+    "listFiles": false /* Print names of files part of the compilation. */,
+    "pretty": true /* Stylize errors and messages using color and context. */,
+    "importHelpers": true,
+    "forceConsistentCasingInFileNames": true
+  }
+}
