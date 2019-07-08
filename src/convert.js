@@ -1,8 +1,27 @@
 import { isString } from './is-string'
 
-/**!
- * Handle string "true" so it becomes boolean.
- * Useful for this case, because we're importing from Shell Environment variables and there are no boolean types.
+/**
+ * Handle string representation of a boolean (e.g. "true") and make it a boolean.
+ *
+ * @preserve
+ *
+ * Useful for when we deal with APIs who aren't disciplined enough.
+ *
+ * Should return boolean true equivalent for any of the following:
+ * - "true"
+ * - "True"
+ * - "TRUE"
+ * - " true   "
+ *
+ * If word "false" in the same way as "true", boolean false will be returned.
+ *
+ * Throws an error if recieved ANYTHING ELSE.
+ *
+ * That can be used when we want to parse Shell Environment variables and there are no boolean types.
+ *
+ * @param {string} maybeString String with one or more words, if it contains word true or false
+ *
+ * @returns {boolean} ONLY when word true or false is passed as parameter
  */
 export const stringToBoolean = maybeString => {
   const trimmed = String(maybeString).trim()
@@ -17,10 +36,12 @@ export const stringToBoolean = maybeString => {
   return trimmed.toLowerCase() === 'true'
 }
 
-/**!
+/**
  * Take an API response that can contain an empty string, make it null.
  *
- * @param {String} subject to convert to Null if empty
+ * @preserve
+ *
+ * @param {string} subject to convert to Null if empty
  */
 export const stringMaybeEmptyToNull = subject => {
   const isNotString = typeof subject !== 'string'
@@ -37,10 +58,13 @@ export const stringMaybeEmptyToNull = subject => {
   return null
 }
 
-/**!
+/**
  * Take an API response value that can be a String, with maybe a Number in it, make it a Number.
  *
- * @param {String} subject Converts a String into a Number, it might become a Float too.
+ * @preserve
+ *
+ * @param {string} subject Converts a String into a Number, it might become a Float too.
+ * @returns {string|number}
  */
 export const stringMaybeContainingNumberToNumber = subject => {
   const doesNotContainNumber = isString(subject) === false

@@ -11,6 +11,10 @@ node_modules:
 		yarn link && \
 		npx sort-package-json && \
 		cd ../../
+	cd __elsewhere__/rollup-plugin-local && \
+		yarn link && \
+		npx sort-package-json && \
+		cd ../../
 	test -d node_modules/@bindings/linting && \
 		rm -rf node_modules/@bindings/linting && \
 		ln -Fsn $(BUILD_DIR)/__elsewhere__/linting $(BUILD_DIR)/node_modules/@bindings/linting
@@ -19,6 +23,7 @@ node_modules:
 		ln -Fsn $(BUILD_DIR)/__elsewhere__/packaging-and-testing $(BUILD_DIR)/node_modules/@bindings/packaging-and-testing
 	yarn link @bindings/linting
 	yarn link @bindings/packaging-and-testing
+	yarn link rollup-plugin-local
 
 .PHONY: deps
 deps: node_modules

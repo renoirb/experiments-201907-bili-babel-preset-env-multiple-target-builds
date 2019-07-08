@@ -1,5 +1,7 @@
-/**!
+/**
  * Take an API response value that can be a String, with maybe a Number in it, make it a Number.
+ *
+ * @preserve
  *
  * @param {String} value Returns true ONLY when is a String, even when string contains number
  */

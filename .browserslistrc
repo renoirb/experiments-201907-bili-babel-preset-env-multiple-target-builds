@@ -1,7 +1,11 @@
 # Browser and JavaScript runtimes we support
 # https://github.com/browserslist/browserslist
+# https://babeljs.io/docs/en/babel-preset-env#browserslist-integration
 # see https://github.com/browserslist/browserslist#configuring-for-different-environments later #TODO
 
-last 2 versions
-ie >= 10
+[test]
 node 10
+
+[production]
+ie >= 10
+> 0.25%, not dead

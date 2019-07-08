@@ -22,31 +22,53 @@ For example, we could import this into modules destined to run different runtime
 
 ## Usage
 
-If you don't have GNU Make available, try running the commands listed in [Makefile](./Makefile)
-Notice this example relies on an UNIX(ish) filesystem with symbolic links, sorry.
+The following assumes an UNIX(ish) environment, at least with a filesystem that supports sybolic links, and a few typical commands: `ln`, `rm`, `test`.
+If not, you'll have to see in the [Makefile](./Makefile) and do the equivalent manually.
 
 ### Dependencies
 
+Since this example is NOT a monorepo, installing dependencies will emulate as if it was.
+
+The following `make` command basically do;
+
+- Install with `yarn`
+- Delete `node_modules/@bindings/` directory for replacement
+- Create new `node_modules/@bindings/` directory
+- Create a "[yarn link](https://yarnpkg.com/lang/en/docs/cli/link/)" for each package
+- Replace/Copy (or create symbolic-links) from `__elsewhere__/foo/` to `node_modules/@bindings/foo/`
+- Tell the top level to use _yarn links_ created above
+
 ```terminal
-# Notice the ln commands for symbolic links
 make deps
 ```
 
-Or
+Or manually
 
 ```terminal
-# But you will have to delete node_modules/, and re-run every time you change somehing __elsewhere__
 yarn
+```
+
+Then, delete `node_modules/@bindings/`, then link things up
+
+```terminal
+# In __elsewhere__/linting/, and other __elsewhere__ sub-directories
+yarn link
+# At the root, for all __elsewhere__ package.json's
+yarn link @bindings/linting
 ```
 
 ### Building and testing
 
-```terminal
-# Build with debug
-make build
+The following `make` command basically do:
 
-# Testing with debug
+- `yarn test`
+- `yarn build` (have a look at [package.json scripts for "build"](./package.json))
+
+With `DEBUG` set to give more debugging output while running commands.
+
+```terminal
 make test
+make build
 
 # Cleanup, for rinse-repeat.
 make clean
@@ -58,6 +80,20 @@ Or manually
 - Cleanup, you'll have to delete `node_modules/` and `dist/` manually, rinse-repeat
 
 ```terminal
-yarn build
 yarn test
+yarn build
+```
+
+### Methods
+
+#### Using BROWSERSLIST
+
+```terminal
+set -gx BROWSERSLIST "ie >= 10, > 1%"
+node_modules/.bin/bili --stack-trace --verbose --format cjs --target browser --file-name index.browser.cjs.js
+node_modules/.bin/bili --stack-trace --verbose --format system --target browser --file-name index.system.cjs.js
+
+set -gx BROWSERSLIST "node 10"
+node_modules/.bin/bili --stack-trace --verbose --format esm --target node --file-name index.mjs
+node_modules/.bin/bili --stack-trace --verbose --format cjs --target node --file-name index.cjs.js
 ```

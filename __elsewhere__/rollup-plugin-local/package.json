@@ -1,0 +1,9 @@
+{
+  "name": "rollup-plugin-local",
+  "version": "1.0.0",
+  "license": "UNLICENSED",
+  "files": [
+    "lib/"
+  ],
+  "main": "lib"
+}

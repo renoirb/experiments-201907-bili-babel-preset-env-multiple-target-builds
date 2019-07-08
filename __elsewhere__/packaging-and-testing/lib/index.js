@@ -1,5 +1,7 @@
-const jest = require('./jest.config.js')
+const jest = require('./jest.config')
+const utils = require('./utils')
 
 module.exports = {
   jest,
+  utils,
 }
