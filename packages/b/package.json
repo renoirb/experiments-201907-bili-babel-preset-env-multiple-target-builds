@@ -1,9 +1,10 @@
 {
   "name": "@frontend-bindings/b",
   "version": "1.0.0",
+  "description": "Example of a ECMAScript module",
   "repository": {
     "type": "git",
-    "url": "https://git.unify360.cgi.com:50043/unify360/frontend-bindings.git"
+    "url": "https://github.com/renoirb/experiments-201907-bili-babel-preset-env-multiple-target-builds"
   },
   "license": "UNLICENSED",
   "files": [
@@ -14,20 +15,16 @@
   "scripts": {
     "build": "yarn run build:node",
     "build:node": "bili --verbose --stack-trace --target node",
-    "preinstall": "node -e \"if(process.env.npm_execpath.indexOf('yarn') === -1) throw new Error('frontend must be installed with Yarn: https://yarnpkg.com/')\"",
-    "lint": "prettier '**/*.{js,md}' --ignore-path .gitignore --write",
     "prepublishOnly": "yarn run build",
     "test": "jest --verbose --maxWorkers=3 --detectOpenHandles",
     "test:watch": "jest --verbose --watch --maxWorkers=3 --detectOpenHandles"
   },
   "dependencies": {
-    "@babel/runtime": "^7.2.0"
+    "@babel/runtime": "^7.4.0",
+    "@frontend-bindings/a": "^1.0.0"
   },
   "devDependencies": {
+    "@frontend-bindings/bundling-config": "^1.0.0",
     "lodash-es": "^4.17.10"
-  },
-  "publishConfig": {
-    "registry": "https://nexus.unify360.cgi.com:50043/repository/npm-hosted/"
-  },
-  "copyright.owner": "CGI Inc."
+  }
 }

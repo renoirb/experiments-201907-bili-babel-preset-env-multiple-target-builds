@@ -1,4 +1,4 @@
-import { convert } from '@bindings/helpers'
+import { convert } from '@frontend-bindings/b'
 
 describe('convert', () => {
   test('accessibility', () => {

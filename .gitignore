@@ -5,3 +5,4 @@
 .yarn.cache
 dist
 node_modules
+.DS_S*

@@ -1,33 +1,28 @@
 {
   "$schema": "http://json.schemastore.org/tsconfig",
   "compilerOptions": {
-    "rootDir": "./",
-    "baseUrl": "./",
-    "incremental": true,
-    "experimentalDecorators": true /* Enables experimental support for ES7 decorators. */,
-    "emitDecoratorMetadata": true /* Enables experimental support for emitting type metadata for decorators. */,
-    "noImplicitAny": true /* If TypeScript can’t infer a type, you must specify it. This mainly applies to parameters of functions and methods: With this settings, you must annotate them. */,
-    "strictNullChecks": true /* null is not part of any type (other than its own type, null) and must be explicitly mentioned if it is a acceptable value. */,
+    "baseUrl": ".",
+    "paths": {
+      "@frontend-bindings/*": ["packages/*"]
+    },
+
     "resolveJsonModule": true,
-    "strictBindCallApply": true,
-    "lib": ["es2015", "es2016", "es2017", "esnext.asynciterable"],
-    "target": "es2017",
+
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    "lib": ["esnext"],
     "module": "esnext",
     "moduleResolution": "node",
+
     "sourceMap": true,
     "inlineSources": true,
     "declaration": true,
+
     "esModuleInterop": true,
-    "strict": true,
-    "paths": {
-      "@frontend-bindings/*": ["packages/*"],
-      "*": ["node_modules", "packages"]
-    }
-  },
-  "include": [
-    "packages",
-    "build/config/typescript/types/*.d.ts",
-    "node_modules/@types/**/*.d.ts"
-  ],
-  "exclude": ["node_modules", "packages/**/dist"]
+
+    "strict": true
+  }
 }

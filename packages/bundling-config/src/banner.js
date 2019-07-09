@@ -10,8 +10,9 @@ const bannerInfoExtract = (
   /** @type {import('@schemastore/package')} */
   pkg
 ) => {
+  const defaultAuthor = 'ACME Corporation'
   let {
-    author = 'CGI Inc.',
+    author = defaultAuthor,
     name,
     version,
     license = 'UNLICENSED',
@@ -20,6 +21,10 @@ const bannerInfoExtract = (
 
   if (Reflect.has(pkgRest, 'copyright.owner')) {
     author = pkgRest['copyright.owner']
+  }
+
+  if (typeof author !== 'string') {
+    author = defaultAuthor
   }
 
   /** @type {import('bili').BannerInfo} */
@@ -42,31 +47,39 @@ const bannerInfoExtract = (
  */
 const bannerFooterExtract = (
   /** @type {import('@schemastore/package')} */
-  pkg
+  pkg,
+  target = undefined,
+  format = undefined
 ) => {
   const external = packageExtractExternals(pkg)
-  const package = bannerInfoExtract(pkg)
+  const dependencies = external.length > 0 ? external.join(', ') : '(none)'
+  const { repository = {}, publishConfig = {}, description } = pkg
+  const bannerInfo = bannerInfoExtract(pkg)
 
   const year = new Date().getFullYear()
 
-  const repository =
-    pkg.repository.url || '(TODO: Set repository.url in package.json)'
-  const registry =
-    pkg.publishConfig.registry ||
-    '(TODO: Set publishConfig.registry in package.json)'
+  const { url: repositoryUrl } = repository
+  const { registry: publishConfigRegistryUrl } = publishConfig
 
   const banner =
     '/*!\n' +
-    ` * ${package.name} ${package.version}\n` +
-    ` * (c) 2015-${year} ${package.author}\n` +
+    ` * ${bannerInfo.name} ${bannerInfo.version}\n` +
     ` *\n` +
-    ` * Dependencies: ${external.join(', ')}\n` +
+    ` * ${description}\n` +
     ` *\n` +
-    ` * Repository: ${repository}\n` +
-    ` * Nexus registry: ${registry}\n` +
+    ` * (c) 2015-${year} ${bannerInfo.author}\n` +
+    ` *\n` +
+    ` * Dependencies: ${dependencies}\n` +
+    ` *\n` +
+    (target ? ` * Target runtime: ${target}\n` : '') +
+    (format ? ` * Output format: ${format}\n` : '') +
+    (repositoryUrl ? ` * Repository: ${repositoryUrl}\n` : '') +
+    (publishConfigRegistryUrl
+      ? ` * Nexus repository: ${publishConfigRegistryUrl}\n`
+      : '') +
     ' */\n\n'
 
-  const footer = `\n\n/* ${package.author} */\n`
+  const footer = `\n\n/* ${bannerInfo.author} */\n`
 
   return {
     banner,

@@ -1,0 +1,8 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`alpha Snapshot 1`] = `
+Alpha {
+  "age": 0,
+  "name": "Renoir Boulanger",
+}
+`;

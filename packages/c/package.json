@@ -1,7 +1,7 @@
 {
-  "name": "@frontend-bindings/a",
+  "name": "@frontend-bindings/c",
   "version": "1.0.0",
-  "description": "Example of a TypeScript module",
+  "description": "Example of a Vue.js component into module",
   "repository": {
     "type": "git",
     "url": "https://github.com/renoirb/experiments-201907-bili-babel-preset-env-multiple-target-builds"
@@ -12,7 +12,6 @@
   ],
   "main": "dist",
   "module": "dist/index.esm.js",
-  "types": "dist/index.d.ts",
   "scripts": {
     "build": "yarn run build:node",
     "build:node": "bili --verbose --stack-trace --target node"
@@ -22,6 +21,6 @@
   },
   "devDependencies": {
     "@frontend-bindings/bundling-config": "^1.0.0",
-    "@frontend-bindings/bundling-config-typescript": "^1.0.0"
+    "@frontend-bindings/bundling-config-vue": "^1.0.0"
   }
 }

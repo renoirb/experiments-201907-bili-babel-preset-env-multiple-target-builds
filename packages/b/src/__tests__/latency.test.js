@@ -1,4 +1,4 @@
-import { latency } from '@bindings/helpers'
+import { latency } from '@frontend-bindings/b'
 
 const grettingMessageMockingHandler = name => `Hi, ${name}`
 

@@ -1,7 +1,16 @@
 const camelCase = require('lodash.camelcase')
 
-const packageNameToModuleName = name =>
+const bundlingConfigPackage = require('../package')
+
+const { cached } = require('./utils')
+
+const packageNameToModuleName = cached(name =>
   camelCase(name.replace(/@/g, '').replace('/', '-'))
+)
+
+const getBundlingConfigDependencyPackageVersion = cached(packageName =>
+  packageExtractVersion(packageName, bundlingConfigPackage.dependencies)
+)
 
 /**
  * Get a package version as string, without the semver constraint notation.
@@ -35,23 +44,20 @@ const packageExtractExternals = (
   /** @type {import('@schemastore/package')} */
   pkg
 ) => {
-  const dependencies = Reflect.has(pkg, 'dependencies')
-    ? Object.keys(pkg.dependencies)
-    : []
+  const { peerDependencies = {}, dependencies = {} } = pkg
 
-  const peerDependencies = Reflect.has(pkg, 'peerDependencies')
-    ? Object.keys(pkg.peerDependencies)
-    : []
+  const deps = Object.keys(dependencies)
 
-  const external = peerDependencies
-    .concat(dependencies.filter(d => !peerDependencies.includes(d)))
+  const externals = deps
+    .concat(Object.keys(peerDependencies).filter(d => !deps.includes(d)))
     .sort((a, b) => String(a).localeCompare(b))
 
-  return external
+  return externals
 }
 
 module.exports = {
   packageNameToModuleName,
   packageExtractVersion,
   packageExtractExternals,
+  getBundlingConfigDependencyPackageVersion,
 }

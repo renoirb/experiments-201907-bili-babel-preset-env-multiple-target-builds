@@ -6,12 +6,15 @@ node_modules:
 		yarn link && \
 		cd ../bundling-config-typescript && \
 		yarn link && \
+		cd ../bundling-config-vue && \
+		yarn link && \
 		cd ../../
 	yarn link @frontend-bindings/bundling-config
 	yarn link @frontend-bindings/bundling-config-typescript
+	yarn link @frontend-bindings/bundling-config-vue
 
 .PHONY: bootstrap
-bootstrap: node_modules
+bootstrap: deps
 	yarn bootstrap
 
 .PHONY: deps

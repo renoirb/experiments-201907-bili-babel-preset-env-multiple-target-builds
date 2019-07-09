@@ -9,6 +9,9 @@
       "concurrency": 1,
       "loglevel": "verbose"
     },
+    "create": {
+      "license": "UNLICENSED"
+    },
     "publish": {
       "allowBranch": "master",
       "npmClient": "npm",

@@ -1,8 +1,7 @@
-const { packageExtractVersion } = require('./package')
+const extendBabelPreset = require('./rollup-plugin-extend-babel-preset')
+const { getBundlingConfigDependencyPackageVersion } = require('./package')
 
-const { dependencies } = require('../package')
-
-const rollupPluginAnalyzerOnAnalysis = ({ bundleSize }) => {
+const onAnalysis = ({ bundleSize }) => {
   const limitBytes = 1e6
   if (bundleSize < limitBytes) return
   console.log(`Bundle size exceeds ${limitBytes} bytes: ${bundleSize} bytes`)
@@ -10,46 +9,72 @@ const rollupPluginAnalyzerOnAnalysis = ({ bundleSize }) => {
 }
 
 /**
- * Generate a Babel TransformOptions configuration object.
- *
- * See also:
- * - https://new.babeljs.io/docs/en/next/babel-preset-env.html
- * - https://babeljs.io/docs/en/babel-preset-env
- * - https://github.com/rollup/rollup-plugin-babel
- * - https://github.com/trainorpj/rollup-babel-jest-setup/blob/master/rollup.config.js
- *
- * @return {import('@types/babel__core').TransformOptions}
+ * Setup rollup-plugin-extend-babel-preset Rollup plugin configuration based on switches.
  */
-const mergeTransformOptionsFactory = (coreJsVersion = null) => (
-  /** @type {import('@types/babel__core').TransformOptions} */ opts = {}
-) => {
-  /** @type {import('@types/babel__core').TransformOptions} */
-  const defaults = {
-    // https://github.com/zloirock/core-js/blob/master/docs/2019-03-19-core-js-3-babel-and-a-look-into-the-future.md#babelpreset-env
-    useBuiltIns: 'usage',
+const createRollupPluginExtendBabelOptions = ({
+  target = 'node',
+  format = 'cjs',
+  isTypeScript = false,
+}) => {
+  const corejs = getBundlingConfigDependencyPackageVersion('core-js')
+
+  const onlyValidTarget = target === 'browser' ? target : 'node'
+
+  const addToPluginOptions = {}
+
+  /** @type {import('@frontend-bindigns/bundling-config').BundlingConfigOptions} */
+  let customOptions = {
+    target: onlyValidTarget,
+    format,
   }
 
-  if (typeof coreJsVersion === 'string') {
+  if (isTypeScript === true) {
+    customOptions.isTypeScript = true
+  }
+
+  if (typeof corejs === 'string') {
     // Add exact package.json's core-js package version
-    defaults.corejs = coreJsVersion
+    customOptions.corejs = corejs
   }
 
-  /** @type {import('@types/babel__core').TransformOptions} */
-  const merged = JSON.parse(
-    JSON.stringify({
-      ...defaults,
-      ...opts,
-    })
-  )
+  const pluginOptions = {
+    customOptions,
+    ...addToPluginOptions,
+  }
 
-  return merged
+  return pluginOptions
 }
 
-const rollupBabelEnvTransformOptions = mergeTransformOptionsFactory(
-  packageExtractVersion('core-js', dependencies)
-)
-
-module.exports = {
-  rollupPluginAnalyzerOnAnalysis,
-  rollupBabelEnvTransformOptions,
+const analyzer = {
+  // rollup-plugin-analyzer
+  // https://github.com/doesdev/rollup-plugin-analyzer
+  stdout: true,
+  onAnalysis(args) {
+    return onAnalysis.call(this, args)
+  },
 }
+
+const main = ({ target = 'node', format = 'cjs', isTypeScript = false }) => {
+  const config = {}
+
+  const plugins = {
+    analyzer,
+  }
+
+  plugins['extend-babel-preset'] = createRollupPluginExtendBabelOptions({
+    target,
+    format,
+    isTypeScript,
+  })
+
+  config.resolvePlugins = {
+    'extend-babel-preset': extendBabelPreset,
+  }
+
+  return {
+    config,
+    plugins,
+  }
+}
+
+module.exports = main

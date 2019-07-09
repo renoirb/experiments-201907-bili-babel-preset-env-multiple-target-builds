@@ -1,11 +1,11 @@
-const banner = require('./banner')
+const bili = require('./bili')
+const jest = require('./jest')
 const package = require('./package')
-const rollup = require('./rollup')
 const utils = require('./utils')
 
 module.exports = {
-  ...banner,
+  bili,
+  jest,
   ...package,
-  ...rollup,
   ...utils,
 }
