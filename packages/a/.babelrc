@@ -1,3 +1,3 @@
 {
-  "presets": [["@frontend-bindings/bundling-config/bili-babel"]],
+  "presets": [["@frontend-bindings/bundling-config/bili-babel"]]
 }

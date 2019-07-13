@@ -45,6 +45,16 @@ Or manually
 yarn bootstrap
 ```
 
+### Add a package
+
+Let's say we want to add '@babel/plugin-proposal-optional-chaining'
+
+Since it's a packageable (i.e. re-usable for other monorepos), we add it as a dependency only in `@frontend-bindings/bundling-config` package.
+
+```terminal
+yarn lerna add @babel/plugin-proposal-optional-chaining packages/bundling-config
+```
+
 ### Building and testing
 
 The following `make` command basically do:

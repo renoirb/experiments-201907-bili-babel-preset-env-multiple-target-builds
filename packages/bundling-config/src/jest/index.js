@@ -11,4 +11,5 @@ module.exports = {
   moduleFileExtensions: ['ts', 'js', 'mjs', 'json'],
   expand: true,
   forceExit: true,
+  verbose: true,
 }
