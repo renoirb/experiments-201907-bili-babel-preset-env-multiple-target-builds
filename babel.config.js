@@ -11,6 +11,10 @@ const createTargets = (
     NODE_ENV = 'development',
 
     /**
+     * **** THERE IS A BETTER WAY ****
+     * Have a look at:
+     * https://github.com/renoirb/experiments-201907-bili-babel-preset-env-multiple-target-builds/blob/extending-bili/packages/bundling-config/src/rollup-plugin-extend-babel-preset.js#L87
+     *
      * **** Trigger warning: This might be a bit too hacky! (it was worse a few hours ago) ****
      *
      * ====== CREATE MULTIPLE TARGET BUILD ======
